@@ -13,7 +13,6 @@ export class GastosService extends Gastos {
     public hucon: HuconService
   ) {
     super();
-    this.hucon.mostrarMensaje('entering expenses service');
    }
 
   newGasto(): Gasto {

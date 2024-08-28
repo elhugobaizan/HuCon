@@ -31,7 +31,7 @@ export class GastosPage {
     this.srv.listGastos().subscribe({
       next: (data: any) => {
         this.listGastos = data.gastos;
-        //this.montoTotal = this.srv.total;
+        this.montoTotal = this.listGastos.reduce((sum: any, gasto: any) => { return sum + gasto.monto}, 0);
       },
       error: (err) => {
         console.log(err);
@@ -56,7 +56,6 @@ export class GastosPage {
           this.list();
         }, 
         error: (err) => {
-          this.nuevoGasto = this.srv.newGasto();
           this.esNuevo = true;
         }
       });
@@ -64,9 +63,12 @@ export class GastosPage {
       this.srv.updateGasto(this.nuevoGasto).subscribe({
         next: (data) => {
           console.log(data);
+          this.nuevoGasto = this.srv.newGasto();
+          this.esNuevo = true;
+          this.list();
         }, 
         error: (err) => {
-
+          this.esNuevo = true;
         }
       });
     }

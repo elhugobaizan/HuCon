@@ -1,11 +1,36 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title color="primary">
-      Gastos
+  <ion-toolbar color="primary">
+    <ion-title>
+      gastos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="hu-page">
+  <ion-list class="header2">
+    <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoGasto.descripcion"></ion-input>
+    <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto"></ion-input>
+    <ion-button (click)="newGasto()">{{nuevoGasto.descripcion==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
+    <ion-button (click)="save()" disabled="{{nuevoGasto.descripcion===''}}">Guardar</ion-button>
+  </ion-list>
+  <div class="scrollable" *ngFor="let gasto of listGastos">
+    <ion-list>
+      <ion-item>
+        <ion-col>{{gasto.descripcion}}</ion-col>
+        <ion-col>{{gasto.monto}}</ion-col>
+        <ion-col><ion-button (click)="update(gasto)">Editar</ion-button></ion-col>
+        <ion-col><ion-button (click)="delete(gasto)">Borrar</ion-button></ion-col>
+      </ion-item>
+    </ion-list>  
+  </div>
+  </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-item>
+      <ion-col size="3">Total</ion-col>
+      <ion-col>{{montoTotal}}</ion-col>
+    </ion-item>  
+  </ion-toolbar>
+</ion-footer>

@@ -16,7 +16,6 @@ export class BancosService extends Bancos {
     public hucon: HuconService
   ) {
     super();
-    this.hucon.mostrarMensaje('entering expenses service');
    }
 
   newBanco(): Banco {
@@ -25,7 +24,6 @@ export class BancosService extends Bancos {
   }
 
   listBancos() {
-    this.hucon.mostrarMensaje('entering banks service');
     return this.http.get(`${environment.server}/bancos`);
   }
 
