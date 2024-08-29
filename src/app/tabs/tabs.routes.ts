@@ -22,15 +22,25 @@ export const routes: Routes = [
           import('../wallets/wallets.page').then((m) => m.WalletsPage),
       },
       {
+        path: 'fijos',
+        loadComponent: () =>
+          import('../fijos/fijos.page').then((m) => m.FijosPage),
+      },
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('../home/home.page').then((m) => m.HomePage),
+      },
+      {
         path: '',
-        redirectTo: '/bancos',
+        redirectTo: '/home',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/bancos',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
 ];

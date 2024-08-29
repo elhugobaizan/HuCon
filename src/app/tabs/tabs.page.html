@@ -1,18 +1,30 @@
+<div class="hu-page">
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
+  <ion-fab vertical="bottom" horizontal="center" translucent="true">
+    <ion-fab-button (click) ="home()">
+      <ion-icon src="../../assets/icon/home.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-tab-bar slot="bottom" class="ion-no-border">
     <ion-tab-button tab="bancos" href="/bancos">
-      <ion-icon aria-hidden="true" name="business"></ion-icon>
+      <ion-icon src="../../assets/icon/bank.svg"></ion-icon>
       <ion-label>Bancos</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="gastos" href="/gastos">
-      <ion-icon aria-hidden="true" name="cash"></ion-icon>
+      <ion-icon src="../../assets/icon/expenses.svg"></ion-icon>
       <ion-label>Gastos</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="fijos" href="/fijos">
+      <ion-icon src="../../assets/icon/cost.svg"></ion-icon>
+      <ion-label>Fijos</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="wallets" href="/wallets">
-      <ion-icon aria-hidden="true" name="wallet"></ion-icon>
+      <ion-icon src="../../assets/icon/wallet.svg"></ion-icon>
       <ion-label>Wallets</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>
+</div>

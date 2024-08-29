@@ -7,8 +7,8 @@ export class Gasto {
     public descripcion: string;
     public monto: number;
     public tipo: number;
-    private vence: number;
-    private vencimiento: Date;
+    public vence: number;
+    public vencimiento: Date;
 
     constructor(id?: number, descripcion?: string, monto?: number, tipo?: number, vence?: number, vencimiento?: Date) {
     (this.id = id ?? 0),
