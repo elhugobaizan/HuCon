@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {Gastos, Gasto} from '../gastos/gastos.models';
 import { environment } from 'src/environments/environment';
 import { HuconService } from '../utils/hucon.service';
+import { Fijo } from './fijos.models';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,28 +16,28 @@ export class FijosService extends Gastos {
     super();
    }
 
-  newGasto(): Gasto {
-    let res = new Gasto();
+  newGasto(): Fijo {
+    let res = new Fijo();
     return res;
   }
 
   listGastos() {
-    return this.http.get(`${environment.server}/gastos`);
+    return this.http.get(`${environment.server}/fijos`);
   }
 
-  createGasto(body: Gasto) {
-    return this.http.post(`${environment.server}/gastos`, body);
+  createGasto(body: Fijo) {
+    return this.http.post(`${environment.server}/fijos`, body);
   }
 
   readGasto(id: string) {
-    return this.http.get(`${environment.server}/gastos/${id}`);
+    return this.http.get(`${environment.server}/fijos/${id}`);
   }
 
-  updateGasto(body: Gasto) {
-    return this.http.patch(`${environment.server}/gastos/${body.id}`,body);
+  updateGasto(body: Fijo) {
+    return this.http.patch(`${environment.server}/fijos/${body.id}`,body);
   }
 
   deleteGasto(id: string) {
-    return this.http.delete(`${environment.server}/gastos/${id}`);
+    return this.http.delete(`${environment.server}/fijos/${id}`);
   }
 }

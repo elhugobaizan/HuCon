@@ -17,10 +17,13 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     FormsModule, ScrollingModule],
 })
 export class WalletsPage { 
-  listWallets: Array<any> = new Array();
-  nuevoWallet = this.srv.newWallet();
+  listObjs: Array<any> = new Array();
+  nuevoObj = this.srv.newWallet();
   montoTotal: number = 0;
   esNuevo: boolean = true;
+  template: any = {
+    title: "Wallets"
+  }
 
   constructor(private srv: WalletsService) {
     this.list();
@@ -29,8 +32,8 @@ export class WalletsPage {
   list() {
     this.srv.listWallets().subscribe({
       next: (data: any) => {
-        this.listWallets = data.wallets;
-        this.montoTotal = this.listWallets.reduce((sum: any, wallet: any) => { return sum + wallet.capital}, 0);
+        this.listObjs = data.wallets;
+        this.montoTotal = this.listObjs.reduce((sum: any, wallet: any) => { return sum + wallet.capital}, 0);
       },
       error: (err) => {
         console.log(err);
@@ -39,16 +42,16 @@ export class WalletsPage {
   }
 
   newWallet() {
-    this.nuevoWallet = this.srv.newWallet();
+    this.nuevoObj = this.srv.newWallet();
     this.esNuevo = true;
   }
 
   save() {
     if(this.esNuevo) {
-      this.srv.createWallet(this.nuevoWallet).subscribe({
+      this.srv.createWallet(this.nuevoObj).subscribe({
         next: (data) => {
           console.log(data);
-          this.nuevoWallet = this.srv.newWallet();
+          this.nuevoObj = this.srv.newWallet();
           this.esNuevo = true;
           this.list();
         }, 
@@ -57,10 +60,10 @@ export class WalletsPage {
         }
       });
     } else {
-      this.srv.updateWallet(this.nuevoWallet).subscribe({
+      this.srv.updateWallet(this.nuevoObj).subscribe({
         next: (data) => {
           console.log(data);
-          this.nuevoWallet = this.srv.newWallet();
+          this.nuevoObj = this.srv.newWallet();
           this.esNuevo = true;
           this.list();
         }, 
@@ -72,9 +75,9 @@ export class WalletsPage {
   }
 
   update(cual: any) {
-    this.nuevoWallet.id = cual.id;
-    this.nuevoWallet.nombre = cual.nombre;
-    this.nuevoWallet.capital = cual.capital;
+    this.nuevoObj.id = cual.id;
+    this.nuevoObj.nombre = cual.nombre;
+    this.nuevoObj.capital = cual.capital;
     this.esNuevo = false;
   }
 

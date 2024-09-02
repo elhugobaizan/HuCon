@@ -5,6 +5,7 @@ import { ExploreContainerComponent } from '../explore-container/explore-containe
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ButtonBoxComponent } from '../componentes/button-box/button-box.component';
 
 @Component({
   selector: 'hucon-home',
@@ -14,7 +15,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [IonCol, IonItem, IonButton, IonList, IonInput, IonHeader, 
     IonToolbar, IonTitle, IonContent, ExploreContainerComponent, CommonModule, 
-    FormsModule, ScrollingModule],
+    FormsModule, ScrollingModule, ButtonBoxComponent],
 })
 export class HomePage { 
   constructor() {

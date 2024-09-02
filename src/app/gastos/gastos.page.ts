@@ -16,17 +16,23 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     IonToolbar, IonTitle, IonContent, ExploreContainerComponent, CommonModule, 
     FormsModule, ScrollingModule],
 })
-export class GastosPage { 
+export class GastosPage {
   listGastos: any;
   nuevoGasto = this.srv.newGasto();
   montoTotal: number = 0;
   esNuevo: boolean = true;
+  template: any = {
+    title: "Gastos"
+  }
 
   constructor(private srv: GastosService) {
     this.list();
-    this.nuevoGasto.tipo = 1;
   }
 
+  refresh() {
+    this.list();
+  } 
+    
   list() {
     this.srv.listGastos().subscribe({
       next: (data: any) => {
@@ -41,8 +47,6 @@ export class GastosPage {
 
   newGasto() {
     this.nuevoGasto = this.srv.newGasto();
-    this.nuevoGasto.tipo = 1;
-    //this.nuevoGasto.vence = 0;
     this.esNuevo = true;
   }
 
@@ -78,9 +82,6 @@ export class GastosPage {
     this.nuevoGasto.id = cual.id;
     this.nuevoGasto.descripcion = cual.descripcion;
     this.nuevoGasto.monto = cual.monto;
-    this.nuevoGasto.tipo = cual.tipo;
-    //this.nuevoGasto.vence = cual.vence;
-    //this.nuevoGasto.vencimiento = cual.vencimiento;
     this.esNuevo = false;
   }
 
@@ -94,9 +95,5 @@ export class GastosPage {
         console.log(err);
       }
     });
-  }
-
-  venceChange(obj: any) {
-    //this.nuevoGasto.vence = obj.target.checked;
   }
 }

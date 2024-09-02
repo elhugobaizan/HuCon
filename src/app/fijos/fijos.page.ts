@@ -16,22 +16,28 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     IonToolbar, IonTitle, IonContent, ExploreContainerComponent, CommonModule, 
     FormsModule, ScrollingModule],
 })
-export class FijosPage { 
-  listGastos: any;
-  nuevoGasto = this.srv.newGasto();
+export class FijosPage {
+  listObjs: any;
+  nuevoObj = this.srv.newGasto();
   montoTotal: number = 0;
   esNuevo: boolean = true;
+  template: any = {
+    title: "Gastos fijos"
+  }
 
   constructor(private srv: FijosService) {
     this.list();
-    this.nuevoGasto.tipo = 0;
   }
 
+  refresh() {
+    this.list();
+  } 
+    
   list() {
     this.srv.listGastos().subscribe({
       next: (data: any) => {
-        this.listGastos = data.gastos;
-        this.montoTotal = this.listGastos.reduce((sum: any, gasto: any) => { return sum + gasto.monto}, 0);
+        this.listObjs = data.fijos;
+        this.montoTotal = this.listObjs.reduce((sum: any, gasto: any) => { return sum + gasto.monto}, 0);
       },
       error: (err) => {
         console.log(err);
@@ -40,18 +46,16 @@ export class FijosPage {
   }
 
   newGasto() {
-    this.nuevoGasto = this.srv.newGasto();
-    this.nuevoGasto.tipo = 0;
-    this.nuevoGasto.vence = 1;
+    this.nuevoObj = this.srv.newGasto();
     this.esNuevo = true;
   }
 
   save() {
     if(this.esNuevo) {
-      this.srv.createGasto(this.nuevoGasto).subscribe({
+      this.srv.createGasto(this.nuevoObj).subscribe({
         next: (data) => {
           console.log(data);
-          this.nuevoGasto = this.srv.newGasto();
+          this.newGasto();
           this.esNuevo = true;
           this.list();
         }, 
@@ -60,10 +64,10 @@ export class FijosPage {
         }
       });
     } else {
-      this.srv.updateGasto(this.nuevoGasto).subscribe({
+      this.srv.updateGasto(this.nuevoObj).subscribe({
         next: (data) => {
           console.log(data);
-          this.nuevoGasto = this.srv.newGasto();
+          this.newGasto();
           this.esNuevo = true;
           this.list();
         }, 
@@ -75,12 +79,11 @@ export class FijosPage {
   }
 
   update(cual: any) {
-    this.nuevoGasto.id = cual.id;
-    this.nuevoGasto.descripcion = cual.descripcion;
-    this.nuevoGasto.monto = cual.monto;
-    this.nuevoGasto.tipo = cual.tipo;
-    this.nuevoGasto.vence = cual.vence;
-    this.nuevoGasto.vencimiento = cual.vencimiento;
+    this.nuevoObj.id = cual.id;
+    this.nuevoObj.id_servicio = cual.id_servicio;
+    this.nuevoObj.monto = cual.monto;
+    this.nuevoObj.mes = cual.vence;
+    this.nuevoObj.vencimiento = cual.vencimiento;
     this.esNuevo = false;
   }
 

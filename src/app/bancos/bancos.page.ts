@@ -21,8 +21,15 @@ export class BancosPage {
   nuevoBanco = this.srv.newBanco();
   montoTotal: number = 0;
   esNuevo: boolean = true;
+  template: any = {
+    title:"Bancos"
+  }
 
   constructor(private srv: BancosService) {
+    this.list();
+  }
+
+  refresh() {
     this.list();
   }
 
@@ -90,4 +97,6 @@ export class BancosPage {
       }
     });
   }
+
+  plazofijo(cual: any) {}
 }

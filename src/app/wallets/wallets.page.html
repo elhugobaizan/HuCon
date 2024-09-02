@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Wallets
+      {{template.title}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,28 +9,37 @@
 <ion-content [fullscreen]="true">
   <div class="hu-page">
   <ion-list class="header2">
-    <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoWallet.nombre"></ion-input>
-    <ion-input id="capital" label="Capital" [(ngModel)]="nuevoWallet.capital"></ion-input>
-    <ion-button (click)="newWallet()">{{nuevoWallet.nombre==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
-    <ion-button (click)="save()" disabled="{{nuevoWallet.nombre===''}}">Guardar</ion-button>
+    <ion-card>
+      <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoObj.nombre"></ion-input>
+      <ion-input id="capital" label="Capital" [(ngModel)]="nuevoObj.capital" type="number"></ion-input>
+      <div>
+        <ion-button (click)="newWallet()">{{nuevoObj.nombre==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="save()" disabled="{{nuevoObj.nombre===''}}">Guardar</ion-button>
+      </div>  
+  </ion-card>
   </ion-list>
-  <div class="scrollable" *ngFor="let wallet of listWallets">
-    <ion-list>
-      <ion-item>
-        <ion-col>{{wallet.nombre}}</ion-col>
-        <ion-col>{{wallet.capital}}</ion-col>
-        <ion-col><ion-button (click)="update(wallet)">Editar</ion-button></ion-col>
-        <ion-col><ion-button (click)="delete(wallet)">Borrar</ion-button></ion-col>
-      </ion-item>
-    </ion-list>  
-  </div>
+  <ng-container *ngIf="listObjs else loading">
+    <div class="scrollable" *ngFor="let objeto of listObjs">
+      <ion-list>
+        <ion-item>
+          <ion-col size="4">{{objeto.nombre}}</ion-col>
+          <ion-col size="4">$ {{objeto.capital | number: '2.0-2'}}</ion-col>
+          <ion-col size="2" style="text-align: end;"><ion-button (click)="update(objeto)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-button></ion-col>
+          <ion-col size="2" style="text-align: end;"><ion-button (click)="delete(objeto)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-button></ion-col>
+        </ion-item>
+      </ion-list>  
+    </div>
+  </ng-container>
   </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="primary">
     <ion-item>
       <ion-col size="3">Total</ion-col>
-      <ion-col>{{montoTotal}}</ion-col>
+      <ion-col>$ {{montoTotal | number: '2.0-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
 </ion-footer>
+<ng-template #loading>
+  <ion-card class="loading">Loading...</ion-card>
+</ng-template>

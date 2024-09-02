@@ -1,26 +1,35 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      gastos
+      {{template.title}}
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg" (click)="refresh()"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
   <div class="hu-page">
   <ion-list class="header2">
-    <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoGasto.descripcion"></ion-input>
-    <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto"></ion-input>
-    <ion-button (click)="newGasto()">{{nuevoGasto.descripcion==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
-    <ion-button (click)="save()" disabled="{{nuevoGasto.descripcion===''}}">Guardar</ion-button>
+    <ion-card>
+      <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoGasto.descripcion"></ion-input>
+      <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto"></ion-input>
+      <div>
+        <ion-button (click)="newGasto()">{{nuevoGasto.descripcion==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="save()" disabled="{{nuevoGasto.descripcion===''}}">Guardar</ion-button>
+      </div>
+    </ion-card>
   </ion-list>
-  <div class="scrollable" *ngFor="let gasto of listGastos">
+  <div class="scrollable">
     <ion-list>
-      <ion-item>
-        <ion-col>{{gasto.descripcion}}</ion-col>
-        <ion-col>{{gasto.monto}}</ion-col>
-        <ion-col><ion-button (click)="update(gasto)">Editar</ion-button></ion-col>
-        <ion-col><ion-button (click)="delete(gasto)">Borrar</ion-button></ion-col>
+      <ion-item *ngFor="let gasto of listGastos">
+        <ion-col size="4">{{gasto.descripcion}}</ion-col>
+        <ion-col size="4">$ {{gasto.monto | number: '2.0-2'}}</ion-col>
+        <ion-col size="2" style="text-align: end;"><ion-button (click)="update(gasto)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-button></ion-col>
+        <ion-col size="2" style="text-align: end;"><ion-button (click)="delete(gasto)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-button></ion-col>
       </ion-item>
     </ion-list>  
   </div>
@@ -30,7 +39,10 @@
   <ion-toolbar color="primary">
     <ion-item>
       <ion-col size="3">Total</ion-col>
-      <ion-col>{{montoTotal}}</ion-col>
+      <ion-col>$ {{montoTotal | number: '2.0-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
 </ion-footer>
+<ng-template #loading>
+  <ion-card class="loading">Loading...</ion-card>
+</ng-template>

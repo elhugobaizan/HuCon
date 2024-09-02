@@ -6,11 +6,39 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
   <div class="hu-page">
+    <ion-card class="home-card">
+      <h4>Disponible (liquidez)</h4>
+      <ion-text>0.000.000,00</ion-text>
+    </ion-card>
+    <ion-card class="home-card">
+      <h4>Vencimientos</h4>
+      Plazo fijo
+      <ion-text>0.000.000,00</ion-text>
+      Servicio
+      <ion-text>0.000.000,00</ion-text>
+    </ion-card>
+    <ion-card class="home-card">
+      <h4>Hoy</h4>
+      Puedo gastar
+      <ion-text>0.000.000,00</ion-text>
+      Ya gaste
+      <ion-text>0.000.000,00</ion-text>
+    </ion-card>
+    <ion-card class="home-card">
+      <h4>Fondos de inversion</h4>
+      Invertido
+      <ion-text>0.000.000,00</ion-text>
+      Ganado
+      <ion-text>0.000.000,00</ion-text>
+    </ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4"><hb-button titulo="Mi sueldo" imagen="/assets/icon/money.svg"></hb-button></ion-col>
+        <ion-col size="4"><hb-button></hb-button></ion-col>
+        <ion-col size="4"><hb-button></hb-button></ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
   </ion-content>
-<ion-footer>
-  <ion-toolbar color="primary">
-  </ion-toolbar>
-</ion-footer>
