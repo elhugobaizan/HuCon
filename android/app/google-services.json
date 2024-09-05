@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849870539954",
+    "project_id": "elhugocontable",
+    "storage_bucket": "elhugocontable.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849870539954:android:ec5121f1b88d1128e48dab",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXTqTZurQdB0AyjVzspWBK6VfIwmy3q_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

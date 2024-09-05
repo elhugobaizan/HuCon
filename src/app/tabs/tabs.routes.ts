@@ -32,6 +32,10 @@ export const routes: Routes = [
           import('../home/home.page').then((m) => m.HomePage),
       },
       {
+        path: 'config',
+        loadComponent: () => import('../config/config.page').then((m) => m.ConfigPage),
+      },
+      {
         path: '',
         redirectTo: '/home',
         pathMatch: 'full',

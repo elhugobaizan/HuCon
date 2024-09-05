@@ -10,21 +10,47 @@
   <div class="hu-page">
     <ion-card class="home-card">
       <h4>Disponible (liquidez)</h4>
-      <ion-text>0.000.000,00</ion-text>
+      <ion-text>$ {{efectivo | number: '1.0-2'}}</ion-text>
+      <h4>Gastos fijos del mes</h4>
+      <ion-text>$ {{porPagar | number: '1.0-2'}}</ion-text>
     </ion-card>
     <ion-card class="home-card">
       <h4>Vencimientos</h4>
-      Plazo fijo
-      <ion-text>0.000.000,00</ion-text>
-      Servicio
-      <ion-text>0.000.000,00</ion-text>
+      <ion-row>
+        <ion-col size="3">
+          <strong>Plazo fijo: </strong>
+        </ion-col>
+        <ion-col size="3">
+          <ion-text>{{vencimientos.inversion | date:'dd/MM/yyyy': 'UTC'}}</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="3">
+          <strong>Servicio: </strong>
+        </ion-col>
+        <ion-col size="3">
+          <ion-text>{{vencimientos.fijo | date:'dd/MM/yyyy': 'UTC'}}</ion-text>
+        </ion-col>
+      </ion-row>
     </ion-card>
     <ion-card class="home-card">
       <h4>Hoy</h4>
-      Puedo gastar
-      <ion-text>0.000.000,00</ion-text>
-      Ya gaste
-      <ion-text>0.000.000,00</ion-text>
+      <ion-row>
+        <ion-col size="4">
+          <strong>Puedo gastar: </strong>
+        </ion-col>
+        <ion-col size="4">
+          <ion-text>$ {{maximoPorDia | number:'1.0-2'}}</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          <strong>Ya gaste: </strong>
+        </ion-col>
+        <ion-col size="4">
+          <ion-text>$ {{gastado | number:'1.0-2'}}</ion-text>
+        </ion-col>
+      </ion-row>
     </ion-card>
     <ion-card class="home-card">
       <h4>Fondos de inversion</h4>
@@ -35,7 +61,7 @@
     </ion-card>
     <ion-grid>
       <ion-row>
-        <ion-col size="4"><hb-button titulo="Mi sueldo" imagen="/assets/icon/money.svg"></hb-button></ion-col>
+        <ion-col size="4"><hb-button titulo="Mi sueldo" imagen="/assets/icon/money.svg" (actionClicked)="config()"></hb-button></ion-col>
         <ion-col size="4"><hb-button></hb-button></ion-col>
         <ion-col size="4"><hb-button></hb-button></ion-col>
       </ion-row>

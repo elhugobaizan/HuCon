@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+      <ion-title>
+        {{template.title}}
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg" (click)="refresh()"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" [scrollY]="false">
+    <div class="hu-page">
+    <ion-list class="header2">
+      <ion-card>
+        <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoObj.nombre"></ion-input>
+        <ion-input id="valor" label="Valor" [(ngModel)]="nuevoObj.valor"></ion-input>
+        <div>
+          <ion-button (click)="newObj()">{{template.validate ? 'Nuevo' : 'Cancelar'}}</ion-button>
+          <ion-button (click)="save()" disabled="{{template.validate}}">Guardar</ion-button>
+        </div>
+      </ion-card>
+    </ion-list>
+    <div class="scrollable">
+      <ion-list>
+        <ion-item *ngFor="let objeto of listObjs">
+          <ion-col size="4">{{objeto[0]}}</ion-col>
+          <ion-col size="4">$ {{objeto[1] | number: '2.0-2'}}</ion-col>
+          <ion-col size="2" style="text-align: end;"><ion-button (click)="update(objeto)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-button></ion-col>
+          <ion-col size="2" style="text-align: end;"><ion-button (click)="delete(objeto)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-button></ion-col>
+        </ion-item>
+      </ion-list>  
+    </div>
+    </div>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar color="primary">
+      <ion-item>
+        <ion-col size="3">Total</ion-col>
+        <ion-col>$ {{template.total | number: '2.0-2'}}</ion-col>
+      </ion-item>  
+    </ion-toolbar>
+  </ion-footer>
+  <ng-template #loading>
+    <ion-card class="loading">Loading...</ion-card>
+  </ng-template>

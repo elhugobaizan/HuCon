@@ -4,8 +4,8 @@
       {{template.title}}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg" (click)="refresh()"></ion-icon>
+      <ion-button (click)="refresh()">
+        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -13,27 +13,41 @@
 
 <ion-content [fullscreen]="true">
   <div class="hu-page">
-  <ion-list class="header2">
+  <ion-list class="header2" *ngIf="edit">
     <ion-card>
-      <ion-select id="nombre" label="Nombre" [(ngModel)]="nuevoObj.id_servicio"></ion-select>
+      <ion-select label="Nombre" #selectServicio interface="action-sheet" [(ngModel)]="servicioSel" ngDefaultControl (ionChange)="onSelectChange($event)">
+        <ion-select-option *ngFor="let servicio of listServicios" [value]="servicio">{{servicio.nombre}}</ion-select-option>
+      </ion-select>
       <ion-input id="capital" label="Capital" [(ngModel)]="nuevoObj.monto" type="number"></ion-input>
       <ion-input id="vencimiento" label="Vencimiento" [(ngModel)]="nuevoObj.vencimiento" type="date"></ion-input>
       <div>
-        <ion-button (click)="newGasto()">{{nuevoObj.id_servicio===0 ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="cancelar()">{{nuevoObj.id_servicio===0 ? 'Nuevo' : 'Cancelar'}}</ion-button>
         <ion-button (click)="save()" disabled="{{nuevoObj.id_servicio===0}}">Guardar</ion-button>
       </div>
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listObjs else loading">
-    <div class="scrollable" *ngFor="let objeto of listObjs">
+    <div class="scrollable">
       <ion-list>
-        <ion-item>
-          <ion-col size="2">{{objeto.nombre}}</ion-col>
-          <ion-col size="3">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
-          <ion-col size="3">{{objeto.vencimiento | date: 'dd/MM/yyyy':'UTC'}}</ion-col>
-          <ion-col size="2" style="text-align:end"><ion-button (click)="update(objeto)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-button></ion-col>
-          <ion-col size="2" style="text-align:end"><ion-button (click)="delete(objeto)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-button></ion-col>
-        </ion-item>
+        <ion-list-header>
+          <ion-col size="4">Nombre</ion-col>
+          <ion-col size="4">Monto</ion-col>
+          <ion-col size="3">Vencimiento</ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-list-header>
+        <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
+          <ion-item [ngClass]="{'pagado': objeto.pagado===1}">
+            <ion-col size="4">{{objeto.nombre}}</ion-col>
+            <ion-col size="4" class="text-right">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
+            <ion-col size="3" class="text-right">{{objeto.vencimiento | date: 'dd/MM/yyyy':'UTC'}}</ion-col>
+            <ion-col size="1" class="text-right"><ion-icon *ngIf="objeto.pagado===1" src="../../assets/icon/check.svg" color="success"></ion-icon></ion-col>
+          </ion-item>
+          <ion-item-options slot="end">
+            <ion-item-option (click)="update(objeto, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="delete(objeto, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="pagar(objeto, sliding)" [ngClass]="{'pagado': objeto.pagado===1}" disabled="{{objeto.pagado == 1}}"><ion-icon src="../../assets/icon/cash.svg"></ion-icon></ion-item-option>
+          </ion-item-options>
+      </ion-item-sliding>
       </ion-list>  
     </div>
   </ng-container>
@@ -50,3 +64,8 @@
 <ng-template #loading>
   <ion-card class="loading">Loading...</ion-card>
 </ng-template>
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="newGasto()">
+    <ion-icon src="../../assets/icon/add.svg"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
