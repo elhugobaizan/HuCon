@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="refresh()"><ion-icon src="../../assets/icon/refresh.svg"></ion-icon></ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{template.title}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="newInversion()"><ion-icon src="../../assets/icon/add.svg"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="hu-page">
+  <ion-list class="header2" *ngIf="edit">
+    <ion-card>
+      <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoObj.nombre"></ion-input>
+      <ion-input id="monto" label="Monto" [(ngModel)]="nuevoObj.monto" type="number"></ion-input>
+      <ion-input id="tasa" label="Tasa" [(ngModel)]="nuevoObj.tasa" type="number"></ion-input>
+      <ion-input id="vencimiento" label="Vencimiento" [(ngModel)]="nuevoObj.vencimiento" type="date"></ion-input>
+      <div>
+        <ion-button (click)="cancelar()">Cancelar</ion-button>
+        <ion-button (click)="save()" disabled="{{nuevoObj.nombre===''}}">Guardar</ion-button>
+      </div>  
+  </ion-card>
+  </ion-list>
+  <ng-container *ngIf="listObjs else loading">
+    <div class="scrollable" [ngStyle]="{'height': edit ? '550px' : '730px'}">
+      <ion-list>
+        <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
+          <ion-item>
+            <ion-col size="3">{{objeto.nombre}}</ion-col>
+            <ion-col size="4" class="text-right">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
+            <ion-col size="2" class="text-right">{{objeto.tasa | number: '2.0-2'}}%</ion-col>
+            <ion-col size="3" class="text-right">{{objeto.vencimiento | date: 'dd/MM/yyyy'}}</ion-col>
+          </ion-item>
+          <ion-item-options>
+            <ion-item-option (click)="update(objeto, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="delete(objeto, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>  
+    </div>
+  </ng-container>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-item>
+      <ion-col size="3">Total</ion-col>
+      <ion-col>$ {{montoTotal | number: '2.0-2'}}</ion-col>
+    </ion-item>  
+  </ion-toolbar>
+</ion-footer>
+<ng-template #loading>
+  <ion-card class="loading">Loading...</ion-card>
+</ng-template>

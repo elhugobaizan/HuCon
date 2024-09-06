@@ -6,7 +6,11 @@
     min-height: 100%;
     width: 97%;
     background-color: #C4C4C4;
-    
+ 
+    ion-list {
+        padding: 0px;
+    }
+
     ion-list-header {
         border-top: 2px solid var(--ion-color-secondary);
         border-bottom: 2px solid var(--ion-color-secondary);
@@ -48,7 +52,6 @@
     }
     .scrollable {
         overflow-y: scroll;
-        max-height: 100%;
     }
 
     .loading {

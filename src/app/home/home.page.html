@@ -3,6 +3,11 @@
     <ion-title>
       Bienvenido a tu app contable
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="refresh()">
+        <ion-icon src="../../assets/icon/refresh.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -54,10 +59,22 @@
     </ion-card>
     <ion-card class="home-card">
       <h4>Fondos de inversion</h4>
-      Invertido
-      <ion-text>0.000.000,00</ion-text>
-      Ganado
-      <ion-text>0.000.000,00</ion-text>
+      <ion-row>
+        <ion-col size="4">
+          <strong>Invertido</strong>
+        </ion-col>
+        <ion-col size="4">
+          <ion-text>$ {{invertido | number:'1.0-2'}}</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          <strong>Ganado</strong>
+        </ion-col>
+        <ion-col size="4">
+          <ion-text>0.000.000,00</ion-text>
+        </ion-col>
+      </ion-row>
     </ion-card>
     <ion-grid>
       <ion-row>

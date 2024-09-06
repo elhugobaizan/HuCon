@@ -33,7 +33,7 @@ export class GastosService extends Gastos {
   }
 
   updateGasto(body: Gasto) {
-    return this.http.patch(`${environment.server}/gastos/${body.id}`,body);
+    return this.http.patch(`${environment.server}/gastos/${body.ID}`,body);
   }
 
   deleteGasto(id: string) {

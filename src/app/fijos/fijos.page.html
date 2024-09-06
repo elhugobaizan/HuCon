@@ -1,17 +1,22 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="refresh()">
+        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
       {{template.title}}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="refresh()">
-        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg"></ion-icon>
+      <ion-button (click)="newFijo()">
+        <ion-icon slot="icon-only" src="../../assets/icon/add.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
   <div class="hu-page">
   <ion-list class="header2" *ngIf="edit">
     <ion-card>
@@ -21,13 +26,13 @@
       <ion-input id="capital" label="Capital" [(ngModel)]="nuevoObj.monto" type="number"></ion-input>
       <ion-input id="vencimiento" label="Vencimiento" [(ngModel)]="nuevoObj.vencimiento" type="date"></ion-input>
       <div>
-        <ion-button (click)="cancelar()">{{nuevoObj.id_servicio===0 ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="cancelar()">Cancelar</ion-button>
         <ion-button (click)="save()" disabled="{{nuevoObj.id_servicio===0}}">Guardar</ion-button>
       </div>
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listObjs else loading">
-    <div class="scrollable">
+    <div class="scrollable" [ngStyle]="{'height': edit ? '550px' : '730px'}">
       <ion-list>
         <ion-list-header>
           <ion-col size="4">Nombre</ion-col>
@@ -57,15 +62,10 @@
   <ion-toolbar color="primary">
     <ion-item>
       <ion-col size="3">Total</ion-col>
-      <ion-col>$ {{montoTotal | number: '2.1-2'}}</ion-col>
+      <ion-col class="text-right">$ {{montoTotal | number: '2.1-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
 </ion-footer>
 <ng-template #loading>
   <ion-card class="loading">Loading...</ion-card>
 </ng-template>
-<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button (click)="newGasto()">
-    <ion-icon src="../../assets/icon/add.svg"></ion-icon>
-  </ion-fab-button>
-</ion-fab>

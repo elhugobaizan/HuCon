@@ -90,7 +90,7 @@ export class FijosPage {
     this.edit = false;
   }
 
-  newGasto() {
+  newFijo() {
     this.nuevoObj = this.srv.newGasto();
     this.esNuevo = true;
     this.edit = true;
@@ -100,11 +100,9 @@ export class FijosPage {
     if(this.esNuevo) {
       this.srv.createGasto(this.nuevoObj).subscribe({
         next: (data) => {
-          this.newGasto();
-          this.esNuevo = true;
+          this.cancelar();
           this.list();
           this.hucon.showMessage('Saved');
-          this.edit = false;
         }, 
         error: (err) => {
           this.hucon.processError(err);
@@ -115,11 +113,9 @@ export class FijosPage {
       console.log(this.nuevoObj);
       this.srv.updateGasto(this.nuevoObj).subscribe({
         next: (data) => {
-          this.newGasto();
-          this.esNuevo = true;
+          this.cancelar();
           this.list();
           this.hucon.showMessage('Updated');
-          this.edit = false;
         }, 
         error: (err) => {
           this.hucon.processError(err);

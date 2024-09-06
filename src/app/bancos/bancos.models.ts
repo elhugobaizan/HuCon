@@ -5,13 +5,13 @@ export class Bancos {
 export class Banco {
     public id: number;
     public nombre: string;
-    public capital: number;
     public efectivo: number;
+    public alias: string;
 
-    constructor(id?: number, nombre?: string, capital?: number, efectivo?: number) {
+    constructor(id?: number, nombre?: string, alias?: string, efectivo?: number) {
     (this.id = id ?? 0),
     (this.nombre = nombre ?? ""),
-    (this.capital = capital ?? 0),
+    (this.alias = alias ?? ""),
     (this.efectivo = efectivo ?? 0);
     }
 

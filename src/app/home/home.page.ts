@@ -9,7 +9,7 @@ import { ButtonBoxComponent } from '../componentes/button-box/button-box.compone
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
+import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { HuconService } from '../utils/hucon.service';
 import { addIcons } from "ionicons";
 
@@ -26,6 +26,7 @@ import { addIcons } from "ionicons";
 export class HomePage implements OnInit{
   public efectivo: number = 0;
   public porPagar: number = 0;
+  public invertido: number = 0;
   public vencimientos:any = {
     inversion: 0,
     fijo: 0
@@ -37,21 +38,27 @@ export class HomePage implements OnInit{
     private router: Router,
     private hucon: HuconService
   ) {
-    this.getEfectivo();
-    this.getVencimientos();
-    this.getGastosDelDia();
+    this.refresh();
   }
 
   ngOnInit(): void {
     this.initPushNotifications();
   }
 
+  refresh() {
+    console.log('refreshing...');
+    this.getEfectivo();
+    this.getVencimientos();
+    this.getGastosDelDia();
+    this.getInvertido();
+  } 
+
   config() {
     this.router.navigateByUrl('config');
   }
 
   getEfectivo() {
-    this.http.get(`${environment.server}/efectivo`).subscribe({
+    this.http.get(`${environment.server}/extras/efectivo`).subscribe({
       next: (data: any) => {
         this.efectivo = parseFloat(data.efectivo[0].total);
         this.getFijosDelMes();
@@ -62,8 +69,19 @@ export class HomePage implements OnInit{
     });
   }
 
+  getInvertido() {
+    this.http.get(`${environment.server}/extras/invertido`).subscribe({
+      next: (data: any) => {
+        this.invertido = parseFloat(data.efectivo[0].total);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
   getVencimientos() {
-    this.http.get(`${environment.server}/vencimientos`).subscribe({
+    this.http.get(`${environment.server}/extras/vencimientos`).subscribe({
       next: (data: any) => {
         this.vencimientos = data.vencimientos[0];
       },
@@ -132,6 +150,11 @@ export class HomePage implements OnInit{
 
           this.hucon.presentAlert(notification.title!, notification.body!);
       });
+
+      PushNotifications.addListener('pushNotificationActionPerformed', 
+        (notification: ActionPerformed) => {
+          
+        });
   }
 
 }

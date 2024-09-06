@@ -1,37 +1,52 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg" (click)="refresh()"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
       {{template.title}}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg" (click)="refresh()"></ion-icon>
-      </ion-button>
+      <ion-button (click)="newGasto()">
+        <ion-icon src="../../assets/icon/add.svg"></ion-icon>
+      </ion-button>    
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" [scrollY]="false">
   <div class="hu-page">
-  <ion-list class="header2">
+  <ion-list class="header2" *ngIf="edit">
     <ion-card>
       <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoGasto.descripcion"></ion-input>
       <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto"></ion-input>
       <div>
-        <ion-button (click)="newGasto()">{{nuevoGasto.descripcion==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="cancelar()">Cancelar</ion-button>
         <ion-button (click)="save()" disabled="{{nuevoGasto.descripcion===''}}">Guardar</ion-button>
       </div>
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listGastos else loading">
-    <div class="scrollable">
+    <div class="scrollable" [ngStyle]="{'height': edit ? '550px' : '730px'}">
       <ion-list>
-        <ion-item *ngFor="let gasto of listGastos">
-          <ion-col size="4">{{gasto.descripcion}}</ion-col>
-          <ion-col size="4">$ {{gasto.monto | number: '2.0-2'}}</ion-col>
-          <ion-col size="2" style="text-align: end;"><ion-button (click)="update(gasto)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-button></ion-col>
-          <ion-col size="2" style="text-align: end;"><ion-button (click)="delete(gasto)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-button></ion-col>
-        </ion-item>
+        <ion-list-header>
+          <ion-col size="6">Motivo</ion-col>
+          <ion-col size="5">Monto</ion-col>
+          <ion-col size="1"></ion-col>
+        </ion-list-header>
+        <ion-item-sliding #sliding *ngFor="let gasto of listGastos">
+          <ion-item>
+            <ion-col size="6">{{gasto.descripcion}}</ion-col>
+            <ion-col size="5" class="text-right">$ {{gasto.monto | number: '2.0-2'}}</ion-col>
+            <ion-col size="1"></ion-col>
+          </ion-item>
+          <ion-item-options slot="end">
+            <ion-item-option (click)="update(gasto, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="delete(gasto, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>  
     </div>
   </ng-container>
@@ -41,7 +56,7 @@
   <ion-toolbar color="primary">
     <ion-item>
       <ion-col size="3">Total</ion-col>
-      <ion-col>$ {{montoTotal | number: '2.0-2'}}</ion-col>
+      <ion-col class="text-right">$ {{montoTotal | number: '2.0-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
 </ion-footer>

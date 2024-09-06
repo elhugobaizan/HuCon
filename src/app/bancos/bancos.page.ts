@@ -20,10 +20,10 @@ export class BancosPage {
   listBancos: any;
   nuevoBanco = this.srv.newBanco();
   montoTotal = {
-    capital: 0,
     efectivo: 0
   };
   esNuevo: boolean = true;
+  edit: boolean = false;
   template: any = {
     title:"Bancos"
   }
@@ -40,7 +40,6 @@ export class BancosPage {
     this.srv.listBancos().subscribe({
       next: (data: any) => {
         this.listBancos = data.bancos;
-        this.montoTotal.capital = this.listBancos.reduce((sum: any, banco: any) => { return sum + banco.capital}, 0);
         this.montoTotal.efectivo = this.listBancos.reduce((sum: any, banco: any) => { return sum + banco.efectivo}, 0);
       },
       error: (err) => {
@@ -52,6 +51,13 @@ export class BancosPage {
   newBanco() {
     this.nuevoBanco = this.srv.newBanco();
     this.esNuevo = true;
+    this.edit = true;
+  }
+
+  cancelar() {
+    this.nuevoBanco = this.srv.newBanco();
+    this.esNuevo = true;
+    this.edit = false;
   }
 
   save() {
@@ -60,7 +66,7 @@ export class BancosPage {
         next: (data) => {
           console.log(data);
           this.nuevoBanco = this.srv.newBanco();
-          this.esNuevo = true;
+          this.cancelar();
           this.list();
         }, 
         error: (err) => {
@@ -72,7 +78,7 @@ export class BancosPage {
         next: (data) => {
           console.log(data);
           this.nuevoBanco = this.srv.newBanco();
-          this.esNuevo = true;
+          this.cancelar();
           this.list();
         }, 
         error: (err) => {
@@ -82,14 +88,18 @@ export class BancosPage {
     }
   }
 
-  update(cual: any) {
+  update(cual: any, sliding: any) {
+    sliding.close();
     this.nuevoBanco.id = cual.id;
     this.nuevoBanco.nombre = cual.nombre;
-    this.nuevoBanco.capital = cual.capital;
+    this.nuevoBanco.efectivo = cual.efectivo;
+    this.nuevoBanco.alias = cual.alias;
     this.esNuevo = false;
+    this.edit = true;
   }
 
-  delete(cual: any) {
+  delete(cual: any, sliding: any) {
+    sliding.close();
     this.srv.deleteBanco(cual.id).subscribe({
       next: (data) => {
         console.log(JSON.stringify(data));
@@ -101,5 +111,7 @@ export class BancosPage {
     });
   }
 
-  plazofijo(cual: any) {}
+  plazofijo(cual: any, sliding: any) {
+    sliding.close();
+  }
 }

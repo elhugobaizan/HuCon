@@ -17,9 +17,9 @@ export const routes: Routes = [
           import('../gastos/gastos.page').then((m) => m.GastosPage),
       },
       {
-        path: 'wallets',
+        path: 'inversiones',
         loadComponent: () =>
-          import('../wallets/wallets.page').then((m) => m.WalletsPage),
+          import('../inversiones/inversiones.page').then((m) => m.InversionesPage),
       },
       {
         path: 'fijos',

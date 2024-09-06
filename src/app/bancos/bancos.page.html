@@ -1,11 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="refresh()">
+        <ion-icon src="../../assets/icon/refresh.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
       {{template.title}}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="refresh()">
-        <ion-icon src="../../assets/icon/refresh.svg"></ion-icon>
+      <ion-button (click)="newBanco()">
+        <ion-icon src="../../assets/icon/add.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -13,13 +18,13 @@
 
 <ion-content [fullscreen]="true">
   <div class="hu-page">
-  <ion-list class="header2">
+  <ion-list class="header2" *ngIf="edit">
     <ion-card>
       <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoBanco.nombre"></ion-input>
-      <ion-input id="capital" label="Capital" [(ngModel)]="nuevoBanco.capital" type="number"></ion-input>
       <ion-input id="efectivo" label="Efectivo" [(ngModel)]="nuevoBanco.efectivo" type="number"></ion-input>
+      <ion-input id="alias" label="Alias" [(ngModel)]="nuevoBanco.alias"></ion-input>
       <div>
-        <ion-button (click)="newBanco()">{{nuevoBanco.nombre==='' ? 'Nuevo' : 'Cancelar'}}</ion-button>
+        <ion-button (click)="cancelar()">Cancelar</ion-button>
         <ion-button (click)="save()" disabled="{{nuevoBanco.nombre===''}}">Guardar</ion-button>
       </div>
     </ion-card>
@@ -29,19 +34,19 @@
       <ion-list>
         <ion-list-header>
           <ion-col size="4">Nombre</ion-col>
-          <ion-col size="4">Capital invertido</ion-col>
           <ion-col size="4">Efectivo</ion-col>
+          <ion-col size="4">Alias</ion-col>
         </ion-list-header>
-        <ion-item-sliding *ngFor="let banco of listBancos">
+        <ion-item-sliding #sliding *ngFor="let banco of listBancos">
           <ion-item>
             <ion-col size="4">{{banco.nombre}}</ion-col>
-            <ion-col size="4" class="text-right">$ {{banco.capital | number: '2.0-2'}}</ion-col>
             <ion-col size="4" class="text-right">$ {{banco.efectivo | number: '2.0-2'}}</ion-col>
+            <ion-col size="4" >{{banco.alias}}</ion-col>
           </ion-item>
           <ion-item-options slot="end">
-            <ion-item-option (click)="update(banco)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
-            <ion-item-option (click)="delete(banco)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
-            <ion-item-option (click)="plazofijo(banco)"><ion-icon src="../../assets/icon/vault.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="update(banco, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="delete(banco, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
+            <ion-item-option (click)="plazofijo(banco, sliding)"><ion-icon src="../../assets/icon/vault.svg"></ion-icon></ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>  
@@ -53,8 +58,7 @@
   <ion-toolbar color="primary">
     <ion-item>
       <ion-col size="4">Total</ion-col>
-      <ion-col size="4" class="text-right">$ {{montoTotal.capital | number: '2.0-2'}}</ion-col>
-      <ion-col size="4" class="text-right">$ {{montoTotal.efectivo | number: '2.0-2'}}</ion-col>
+      <ion-col size="6">$ {{montoTotal.efectivo | number: '2.0-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
 </ion-footer>
