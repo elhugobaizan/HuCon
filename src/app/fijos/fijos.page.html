@@ -32,7 +32,7 @@
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listObjs else loading">
-    <div class="scrollable" [ngStyle]="{'height': edit ? '550px' : '730px'}">
+    <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
       <ion-list>
         <ion-list-header>
           <ion-col size="4">Nombre</ion-col>

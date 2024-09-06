@@ -30,7 +30,7 @@
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listBancos else loading">
-    <div class="scrollable">
+    <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
       <ion-list>
         <ion-list-header>
           <ion-col size="4">Nombre</ion-col>
