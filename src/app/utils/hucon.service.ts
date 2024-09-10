@@ -18,6 +18,13 @@ export class HuconService {
       a.present();
     }
 
+    compareDate(date1: string, date2: string) {
+      let d1 = new Date(date1);
+      let d2 = new Date(date2);
+      console.log(d1,d2)
+      return d1.getDay()===d2.getDay() && d1.getMonth()===d2.getMonth() && d1.getFullYear()===d2.getFullYear();
+    }
+    
     async showMessage(texto: string, tipo: string = 'success') {
         let t = await this.toast.create({
           message: texto,

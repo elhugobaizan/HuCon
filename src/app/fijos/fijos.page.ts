@@ -6,8 +6,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HuconService } from '../utils/hucon.service';
-import { Servicio } from './fijos.models';
+import { Fijo, Servicio } from './fijos.models';
 import { addIcons } from "ionicons";
+import * as moment from 'moment';
 
 @Component({
   selector: 'hucon-fijos',
@@ -20,19 +21,20 @@ import { addIcons } from "ionicons";
     FormsModule, ScrollingModule],
 })
 export class FijosPage {
-  listObjs: any;
+  listObjs: any[] = [];
   listServicios: Servicio[] = [];
   servicioSel: Servicio = new Servicio();
   nuevoObj = this.srv.newGasto();
   montoTotal: number = 0;
   esNuevo: boolean = true;
   edit: boolean = false;
+  today: string = moment().format('YYYY-MM-DD');
   template: any = {
     title: "Gastos fijos"
   }
 
   constructor(private srv: FijosService,
-    private hucon: HuconService
+    public hucon: HuconService
   ) {
     this.list();
     this.servicios();
@@ -73,7 +75,20 @@ export class FijosPage {
   list() {
     this.srv.listGastos().subscribe({
       next: (data: any) => {
-        this.listObjs = data.fijos;
+        data.fijos.forEach((element: Fijo) => {
+          let venc = element.vencimiento ? element.vencimiento.toString().split('T')[0] : '';
+          let temp = {
+            ID: element.ID, 
+            id_servicio: element.id_servicio, 
+            nombre: element.nombre, 
+            monto: element.monto, 
+            mes: element.mes, 
+            vencimiento: venc, 
+            pagado: element.pagado
+          };
+          
+          this.listObjs.push(temp);
+        });
         this.montoTotal = this.listObjs.reduce((sum: any, gasto: any) => { 
           return gasto.pagado===0 ? sum + gasto.monto : sum;
         }, 0);

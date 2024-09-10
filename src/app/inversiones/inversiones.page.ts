@@ -5,7 +5,7 @@ import { InversionesService } from './inversiones.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { Banco } from './inversiones.models';
+import { Banco, Inversion } from './inversiones.models';
 
 @Component({
   selector: 'hucon-inversiones',
@@ -46,13 +46,27 @@ export class InversionesPage {
   }
 
   refresh() {
+    this.montoTotal = 0;
     this.list();
   }
 
   list() {
     this.srv.listInversiones().subscribe({
       next: (data: any) => {
-        this.listObjs = data.inversiones;
+        data.inversiones.forEach((element: Inversion) => {
+          let venc = element.vencimiento ? element.vencimiento.toString().split('T')[0] : '';
+          let temp = {
+            ID: element.ID, 
+            id_banco: element.id_banco, 
+            nombre: element.nombre, 
+            monto: element.monto, 
+            tasa: element.tasa, 
+            vencimiento: venc,
+            tipo: element.tipo
+          };
+          this.listObjs.push(temp);
+        });
+
         this.montoTotal = this.listObjs.reduce((sum: any, inversion: any) => { return sum + inversion.monto}, 0);
       },
       error: (err) => {

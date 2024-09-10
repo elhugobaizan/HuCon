@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { HuconService } from '../utils/hucon.service';
 import { addIcons } from "ionicons";
+import * as moment from 'moment';
 
 @Component({
   selector: 'hucon-home',
@@ -27,9 +28,10 @@ export class HomePage implements OnInit{
   public efectivo: number = 0;
   public porPagar: number = 0;
   public invertido: number = 0;
+  today: string = moment().format('YYYY-MM-DD');
   public vencimientos:any = {
-    inversion: 0,
-    fijo: 0
+    inversion: '',
+    fijo: ''
   };
   public gastado: number = 0;
   public maximoPorDia: number = 0;
@@ -83,7 +85,8 @@ export class HomePage implements OnInit{
   getVencimientos() {
     this.http.get(`${environment.server}/extras/vencimientos`).subscribe({
       next: (data: any) => {
-        this.vencimientos = data.vencimientos[0];
+        this.vencimientos.inversion = data.vencimientos[0].inversion ? data.vencimientos[0].inversion.toString().split('T')[0] : '';;
+        this.vencimientos.fijo = data.vencimientos[0].fijo ? data.vencimientos[0].fijo.toString().split('T')[0] : '';;
       },
       error: (err) => {
         console.log(err);

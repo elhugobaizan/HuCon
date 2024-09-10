@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="refresh()">
-        <ion-icon slot="icon-only" src="../../assets/icon/refresh.svg"></ion-icon>
+        <ion-icon class="black-icon" src="../../assets/icon/refresh.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>
@@ -10,7 +10,7 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="newFijo()">
-        <ion-icon slot="icon-only" src="../../assets/icon/add.svg"></ion-icon>
+        <ion-icon class="black-icon" src="../../assets/icon/add.svg"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -35,17 +35,20 @@
     <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
       <ion-list>
         <ion-list-header>
-          <ion-col size="4">Nombre</ion-col>
+          <ion-col size="3">Nombre</ion-col>
+          <ion-col size="4">Vencimiento</ion-col>
           <ion-col size="4">Monto</ion-col>
-          <ion-col size="3">Vencimiento</ion-col>
           <ion-col size="1"></ion-col>
         </ion-list-header>
         <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
           <ion-item [ngClass]="{'pagado': objeto.pagado===1}">
-            <ion-col size="4">{{objeto.nombre}}</ion-col>
+            <ion-col size="3">{{objeto.nombre}}</ion-col>
+            <ion-col size="4" class="text-right">{{objeto.vencimiento}}</ion-col>
             <ion-col size="4" class="text-right">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
-            <ion-col size="3" class="text-right">{{objeto.vencimiento | date: 'dd/MM/yyyy':'UTC'}}</ion-col>
-            <ion-col size="1" class="text-right"><ion-icon *ngIf="objeto.pagado===1" src="../../assets/icon/check.svg" color="success"></ion-icon></ion-col>
+            <ion-col size="1" class="text-right">
+              <ion-icon *ngIf="objeto.pagado===1" src="../../assets/icon/check.svg" color="success"></ion-icon>
+              <ion-icon *ngIf="objeto.vencimiento===today && objeto.pagado===0" src="../../assets/icon/alert.svg" color="danger"></ion-icon>
+            </ion-col>
           </ion-item>
           <ion-item-options slot="end">
             <ion-item-option (click)="update(objeto, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
@@ -61,7 +64,7 @@
 <ion-footer>
   <ion-toolbar color="primary">
     <ion-item>
-      <ion-col size="3">Total</ion-col>
+      <ion-col size="6">Total al {{today}}</ion-col>
       <ion-col class="text-right">$ {{montoTotal | number: '2.1-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
