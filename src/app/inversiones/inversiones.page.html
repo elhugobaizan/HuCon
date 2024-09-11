@@ -33,6 +33,12 @@
   <ng-container *ngIf="listObjs else loading">
     <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
       <ion-list>
+        <ion-list-header>
+          <ion-col size="3">Nombre</ion-col>
+          <ion-col size="4">Monto</ion-col>
+          <ion-col size="2">Tasa</ion-col>
+          <ion-col size="3">Vencimiento</ion-col>
+        </ion-list-header>
         <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
           <ion-item>
             <ion-col size="3">{{objeto.nombre}}</ion-col>

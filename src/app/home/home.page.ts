@@ -1,7 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonInput, IonList, IonButton, IonItem, IonCol, IonRow } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-//import { HomeService } from './home.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -11,8 +10,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { HuconService } from '../utils/hucon.service';
-import { addIcons } from "ionicons";
 import * as moment from 'moment';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'hucon-home',
@@ -44,7 +43,10 @@ export class HomePage implements OnInit{
   }
 
   ngOnInit(): void {
-    this.initPushNotifications();
+    const isPushNotificationsAvailable = Capacitor.isPluginAvailable('PushNotifications');
+    if(isPushNotificationsAvailable){
+      this.initPushNotifications();
+    }
   }
 
   refresh() {

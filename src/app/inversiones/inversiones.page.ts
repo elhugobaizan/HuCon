@@ -46,6 +46,7 @@ export class InversionesPage {
   }
 
   refresh() {
+    this.listObjs = [];
     this.montoTotal = 0;
     this.list();
   }
