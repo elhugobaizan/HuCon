@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" [scrollY]="false">
+<ion-content [fullscreen]="true">
   <div class="hu-page">
     <ion-card class="home-card">
       <h4>Disponible (liquidez)</h4>
@@ -76,10 +76,10 @@
       </ion-row>
       <ion-row>
         <ion-col size="4">
-          <strong>Ganado</strong>
+          <strong>Ganado hoy</strong>
         </ion-col>
         <ion-col size="4">
-          <ion-text>0.000.000,00</ion-text>
+          <ion-text>$ {{gananciaDia | number:'1.0-2'}}</ion-text>
         </ion-col>
       </ion-row>
     </ion-card>

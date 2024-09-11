@@ -43,4 +43,23 @@ export class InversionesService extends Inversiones {
   deleteInversion(id: string) {
     return this.http.delete(`${environment.server}/inversiones/${id}`);
   }
+
+  calculateDailyEarnings() {
+    //(Money*(Rate/365*dayCount))
+
+    return new Promise(resolve => this.listInversiones().subscribe({
+      next: (data: any) => {
+        resolve(data.inversiones.map((element: Inversion) => {
+          return {
+            status: 'OK',
+            name: element.nombre,
+            earn: element.monto*((element.tasa/100)/365*1)
+          }
+        }));
+      },
+      error: () => {
+        resolve({status:'error'});
+      }
+    }));
+  }
 }

@@ -12,6 +12,7 @@ import { ActionPerformed, PushNotifications, PushNotificationSchema, Token } fro
 import { HuconService } from '../utils/hucon.service';
 import * as moment from 'moment';
 import { Capacitor } from '@capacitor/core';
+import { InversionesService } from '../inversiones/inversiones.service';
 
 @Component({
   selector: 'hucon-home',
@@ -27,6 +28,7 @@ export class HomePage implements OnInit{
   public efectivo: number = 0;
   public porPagar: number = 0;
   public invertido: number = 0;
+  public gananciaDia: number = 0;
   today: string = moment().format('YYYY-MM-DD');
   public vencimientos:any = {
     inversion: '',
@@ -37,7 +39,8 @@ export class HomePage implements OnInit{
 
   constructor(private http: HttpClient,
     private router: Router,
-    private hucon: HuconService
+    private hucon: HuconService,
+    private srv: InversionesService
   ) {
     this.refresh();
   }
@@ -51,6 +54,9 @@ export class HomePage implements OnInit{
 
   refresh() {
     this.hucon.showMessage('refreshing...', 'info');
+    this.srv.calculateDailyEarnings().then((res: any) => {
+      this.gananciaDia = res.reduce((sum: any, gasto: any) => { return sum + parseFloat(gasto.earn)}, 0);
+    })
     this.getEfectivo();
     this.getVencimientos();
     this.getGastosDelDia();

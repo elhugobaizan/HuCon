@@ -1,12 +1,17 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToastController, AlertController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
+
+const huConServer: string = environment.server;
 
 @Injectable({
     providedIn: 'root'
   })
 export class HuconService {
     constructor(private toast: ToastController,
-      private alert: AlertController
+      private alert: AlertController,
+      private http: HttpClient
     ) {}
 
     async presentAlert(title: string, message: string) {
