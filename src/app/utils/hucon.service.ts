@@ -39,6 +39,6 @@ export class HuconService {
 
     processError(err: any) {
       console.log(err);
-      this.showMessage(err.error.message.message, 'danger');
+      this.showMessage(err.error, 'danger');
     }
 }

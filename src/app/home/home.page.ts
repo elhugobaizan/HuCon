@@ -50,7 +50,7 @@ export class HomePage implements OnInit{
   }
 
   refresh() {
-    console.log('refreshing...');
+    this.hucon.showMessage('refreshing...', 'info');
     this.getEfectivo();
     this.getVencimientos();
     this.getGastosDelDia();
@@ -68,7 +68,7 @@ export class HomePage implements OnInit{
         this.getFijosDelMes();
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -79,7 +79,7 @@ export class HomePage implements OnInit{
         this.invertido = parseFloat(data.efectivo[0].total);
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -91,7 +91,7 @@ export class HomePage implements OnInit{
         this.vencimientos.fijo = data.vencimientos[0].fijo ? data.vencimientos[0].fijo.toString().split('T')[0] : '';;
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -102,7 +102,7 @@ export class HomePage implements OnInit{
         this.gastado = data.gastos[0].total;
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -110,7 +110,6 @@ export class HomePage implements OnInit{
   calcGastoMaximoDiario() {
     let hoy = new Date()
     let dias:number = new Date(hoy.getFullYear(), hoy.getMonth()+1, 0).getDate();
-    console.log(this.porPagar);
     this.maximoPorDia = (this.efectivo - this.porPagar) / dias;    
   }
 
@@ -121,7 +120,7 @@ export class HomePage implements OnInit{
         this.calcGastoMaximoDiario();
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
