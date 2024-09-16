@@ -5,6 +5,7 @@ import { BancosService } from './bancos.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HuconService } from '../utils/hucon.service';
 
 @Component({
   selector: 'hucon-bancos',
@@ -28,11 +29,16 @@ export class BancosPage {
     title:"Bancos"
   }
 
-  constructor(private srv: BancosService) {
+  constructor(
+    private srv: BancosService,
+    private hucon: HuconService) {
     this.list();
   }
 
   refresh() {
+    this.hucon.showMessage('Refreshing...','info');
+    this.listBancos = [];
+    this.montoTotal.efectivo = 0;
     this.list();
   }
 
@@ -43,7 +49,7 @@ export class BancosPage {
         this.montoTotal.efectivo = this.listBancos.reduce((sum: any, banco: any) => { return sum + banco.efectivo}, 0);
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -63,25 +69,25 @@ export class BancosPage {
   save() {
     if(this.esNuevo) {
       this.srv.createBanco(this.nuevoBanco).subscribe({
-        next: (data) => {
-          console.log(data);
-          this.nuevoBanco = this.srv.newBanco();
+        next: (data: any) => {
+          this.hucon.showMessage(data);
           this.cancelar();
           this.list();
         }, 
         error: (err) => {
+          this.hucon.processError(err.message);
           this.esNuevo = true;
         }
       });
     } else {
       this.srv.updateBanco(this.nuevoBanco).subscribe({
-        next: (data) => {
-          console.log(data);
-          this.nuevoBanco = this.srv.newBanco();
+        next: (data: any) => {
+          this.hucon.showMessage(data);
           this.cancelar();
           this.list();
         }, 
         error: (err) => {
+          this.hucon.processError(err.message);
           this.esNuevo=true;
         }
       });
@@ -90,7 +96,7 @@ export class BancosPage {
 
   update(cual: any, sliding: any) {
     sliding.close();
-    this.nuevoBanco.id = cual.id;
+    this.nuevoBanco.ID = cual.ID;
     this.nuevoBanco.nombre = cual.nombre;
     this.nuevoBanco.efectivo = cual.efectivo;
     this.nuevoBanco.alias = cual.alias;
@@ -100,13 +106,13 @@ export class BancosPage {
 
   delete(cual: any, sliding: any) {
     sliding.close();
-    this.srv.deleteBanco(cual.id).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
+    this.srv.deleteBanco(cual.ID).subscribe({
+      next: (data: any) => {
+        this.hucon.showMessage(data.message);
         this.list();
       },
-      error: (err) => {
-        console.log(err);
+      error: (err: any) => {
+        this.hucon.showMessage(err.message);
       }
     });
   }

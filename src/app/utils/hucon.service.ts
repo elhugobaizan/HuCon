@@ -34,6 +34,8 @@ export class HuconService {
         let t = await this.toast.create({
           message: texto,
           color: tipo,
+          position: 'top',
+          duration: 3000,
           buttons: [{
             text: 'Dismiss',
             role: 'cancel'

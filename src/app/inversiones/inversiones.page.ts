@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Banco, Inversion } from './inversiones.models';
+import { HuconService } from '../utils/hucon.service';
 
 @Component({
   selector: 'hucon-inversiones',
@@ -29,7 +30,9 @@ export class InversionesPage {
     title: "Inversiones"
   }
 
-  constructor(private srv: InversionesService) {
+  constructor(
+    private srv: InversionesService,
+    private hucon: HuconService) {
     this.list();
     this.bancos();
   }
@@ -40,7 +43,7 @@ export class InversionesPage {
         this.listBancos = data.bancos;
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -48,6 +51,7 @@ export class InversionesPage {
   refresh() {
     this.listObjs = [];
     this.montoTotal = 0;
+    this.hucon.showMessage('Refreshing', 'Info');
     this.list();
   }
 
@@ -71,7 +75,7 @@ export class InversionesPage {
         this.montoTotal = this.listObjs.reduce((sum: any, inversion: any) => { return sum + inversion.monto}, 0);
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -91,23 +95,25 @@ export class InversionesPage {
   save() {
     if(this.esNuevo) {
       this.srv.createInversion(this.nuevoObj).subscribe({
-        next: (data) => {
-          console.log(data);
+        next: (data: any) => {
+          this.hucon.showMessage(data.message);
           this.cancelar();
           this.list();
         }, 
         error: (err) => {
+          this.hucon.processError(err);
           this.esNuevo = true;
         }
       });
     } else {
       this.srv.updateInversion(this.nuevoObj).subscribe({
-        next: (data) => {
-          console.log(data);
+        next: (data: any) => {
+          this.hucon.showMessage(data.message);
           this.cancelar();
           this.list();
         }, 
         error: (err) => {
+          this.hucon.processError(err);
           this.esNuevo = true;
         }
       });
@@ -122,19 +128,20 @@ export class InversionesPage {
     this.nuevoObj.id_banco = cual.id_banco;
     this.nuevoObj.tasa = cual.tasa;
     this.nuevoObj.vencimiento = cual.vencimiento;
+    this.nuevoObj.tipo = cual.tipo;
     this.esNuevo = false;
     this.edit = true;
   }
 
   delete(cual: any, sliding: any) {
     sliding.close();
-    this.srv.deleteInversion(cual.id).subscribe({
+    this.srv.deleteInversion(cual.ID).subscribe({
       next: (data) => {
-        console.log(JSON.stringify(data));
+        this.hucon.showMessage(JSON.stringify(data));
         this.list();
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }

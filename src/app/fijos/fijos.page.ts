@@ -7,7 +7,6 @@ import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HuconService } from '../utils/hucon.service';
 import { Fijo, Servicio } from './fijos.models';
-import { addIcons } from "ionicons";
 import * as moment from 'moment';
 
 @Component({
@@ -46,7 +45,7 @@ export class FijosPage {
         this.listServicios = data.servicios;
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -57,7 +56,6 @@ export class FijosPage {
     this.nuevoObj.pagado = 1;
     this.esNuevo = false;
     alert('estas seguro que queres pagar?' + this.nuevoObj.nombre);
-    console.log(this.nuevoObj);
     this.save();
   }
 
@@ -68,7 +66,9 @@ export class FijosPage {
   }
 
   refresh() {
-    console.log('refreshing...');
+    this.hucon.showMessage('Refreshing...','info');
+    this.listObjs = [];
+    this.montoTotal = 0;
     this.list();
   } 
     
@@ -94,7 +94,7 @@ export class FijosPage {
         }, 0);
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -114,10 +114,10 @@ export class FijosPage {
   save() {
     if(this.esNuevo) {
       this.srv.createGasto(this.nuevoObj).subscribe({
-        next: (data) => {
+        next: (data: any) => {
           this.cancelar();
           this.list();
-          this.hucon.showMessage('Saved');
+          this.hucon.showMessage(data);
         }, 
         error: (err) => {
           this.hucon.processError(err);
@@ -127,10 +127,10 @@ export class FijosPage {
     } else {
       console.log(this.nuevoObj);
       this.srv.updateGasto(this.nuevoObj).subscribe({
-        next: (data) => {
+        next: (data: any) => {
           this.cancelar();
           this.list();
-          this.hucon.showMessage('Updated');
+          this.hucon.showMessage(data);
         }, 
         error: (err) => {
           this.hucon.processError(err);
@@ -159,11 +159,11 @@ export class FijosPage {
     sliding.close();
     this.srv.deleteGasto(cual.id).subscribe({
       next: (data) => {
-        console.log(JSON.stringify(data));
+        this.hucon.showMessage(JSON.stringify(data));
         this.list();
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }

@@ -36,7 +36,7 @@ export class BancosService extends Bancos {
   }
 
   updateBanco(body: Banco) {
-    return this.http.patch(`${environment.server}/bancos/${body.id}`,body);
+    return this.http.patch(`${environment.server}/bancos/${body.ID}`,body);
 
   }
 

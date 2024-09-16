@@ -84,7 +84,7 @@ export class ConfigPage {
   }
 
   delete(cual: any) {
-    this.srv.deleteConfig(cual.id).subscribe({
+    this.srv.deleteConfig(cual.ID).subscribe({
       next: (data) => {
         console.log(JSON.stringify(data));
         this.list();

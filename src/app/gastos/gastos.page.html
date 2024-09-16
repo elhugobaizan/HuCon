@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" id="header">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button>
@@ -21,7 +21,7 @@
   <ion-list class="header2" *ngIf="edit">
     <ion-card>
       <ion-input id="nombre" label="Nombre" [(ngModel)]="nuevoGasto.descripcion"></ion-input>
-      <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto"></ion-input>
+      <ion-input id="capital" label="Capital" [(ngModel)]="nuevoGasto.monto" type="number"></ion-input>
       <div>
         <ion-button (click)="cancelar()">Cancelar</ion-button>
         <ion-button (click)="save()" disabled="{{nuevoGasto.descripcion===''}}">Guardar</ion-button>

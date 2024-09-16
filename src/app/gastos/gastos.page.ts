@@ -5,6 +5,7 @@ import { GastosService } from './gastos.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HuconService } from '../utils/hucon.service';
 
 @Component({
   selector: 'hucon-gastos',
@@ -14,7 +15,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [IonCol, IonItem, IonButton, IonList, IonInput, IonHeader, 
     IonToolbar, IonTitle, IonContent, ExploreContainerComponent, CommonModule, 
-    FormsModule, ScrollingModule],
+    FormsModule, ScrollingModule]
 })
 export class GastosPage {
   listGastos: any;
@@ -26,11 +27,16 @@ export class GastosPage {
     title: "Gastos"
   }
 
-  constructor(private srv: GastosService) {
+  constructor(
+    private srv: GastosService,
+    private hucon: HuconService) {
     this.list();
   }
 
   refresh() {
+    this.hucon.showMessage('Refreshing...','info');
+    this.listGastos = [];
+    this.montoTotal = 0;
     this.list();
   } 
     
@@ -41,7 +47,7 @@ export class GastosPage {
         this.montoTotal = this.listGastos.reduce((sum: any, gasto: any) => { return sum + gasto.monto}, 0);
       },
       error: (err) => {
-        console.log(err);
+        this.hucon.processError(err);
       }
     });
   }
@@ -61,27 +67,25 @@ export class GastosPage {
   save() {
     if(this.esNuevo) {
       this.srv.createGasto(this.nuevoGasto).subscribe({
-        next: (data) => {
-          console.log(data);
-          this.nuevoGasto = this.srv.newGasto();
-          this.esNuevo = true;
-          this.list();
-          this.edit = false;
+        next: (data: any) => {
+          this.hucon.showMessage(data.message);
+          this.cancelar();
+          this.refresh();
         }, 
         error: (err) => {
+          this.hucon.processError(err);
           this.esNuevo = true;
         }
       });
     } else {
       this.srv.updateGasto(this.nuevoGasto).subscribe({
-        next: (data) => {
-          console.log(data);
-          this.nuevoGasto = this.srv.newGasto();
-          this.esNuevo = true;
-          this.list();
-          this.edit = false;
+        next: (data: any) => {
+          this.hucon.showMessage(data.message);
+          this.cancelar();
+          this.refresh();
         }, 
         error: (err) => {
+          this.hucon.processError(err);
           this.esNuevo = true;
         }
       });
@@ -93,19 +97,20 @@ export class GastosPage {
     this.nuevoGasto.ID = cual.ID;
     this.nuevoGasto.descripcion = cual.descripcion;
     this.nuevoGasto.monto = cual.monto;
+    console.log(this.nuevoGasto);
     this.esNuevo = false;
     this.edit = true;
   }
 
   delete(cual: any, sliding: any) {
     sliding.close();
-    this.srv.deleteGasto(cual.id).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
+    this.srv.deleteGasto(cual.ID).subscribe({
+      next: (data: any) => {
+        this.hucon.showMessage(data.message);
         this.list();
       },
-      error: (err) => {
-        console.log(err);
+      error: (err: any) => {
+        this.hucon.processError(err);
       }
     });
   }
