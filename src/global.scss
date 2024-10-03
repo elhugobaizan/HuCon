@@ -39,6 +39,7 @@
     padding: 8px;
     min-height: 100%;
     width: 98%;
+    height: 110%;
     background-color: #C4C4C4;
      
     ion-icon.black-icon {
@@ -46,6 +47,7 @@
     }
     ion-list {
         padding: 0px;
+        width: calc(100% - 8px);
     }
 
     ion-list-header {
@@ -100,7 +102,6 @@
     }
     .scrollable {
         overflow-y: scroll;
-        width: 98%;
     }
 
     .loading {

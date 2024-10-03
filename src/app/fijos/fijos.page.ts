@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonSelect, IonSelectOption, IonItemOptions, IonItemOption, IonItemSliding, IonContent, IonInput, IonList, IonButton, IonItem, IonCol } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonSelect, IonSelectOption, IonItemOptions, IonItemOption, IonItemSliding, IonContent, IonInput, IonList, IonButton, IonItem, IonCol, ModalController } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { FijosService } from './fijos.service';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HuconService } from '../utils/hucon.service';
 import { Fijo, Servicio } from './fijos.models';
+import { LoadingController } from '@ionic/angular';
 import * as moment from 'moment';
 
 @Component({
@@ -28,15 +29,17 @@ export class FijosPage {
   esNuevo: boolean = true;
   edit: boolean = false;
   today: string = moment().format('YYYY-MM-DD');
+  selected: Fijo = new Fijo();
   template: any = {
     title: "Gastos fijos"
   }
+  isModalOpen: boolean = false;
 
   constructor(private srv: FijosService,
+    private loader: LoadingController,
     public hucon: HuconService
   ) {
     this.list();
-    this.servicios();
   }
 
   servicios() {
@@ -55,7 +58,7 @@ export class FijosPage {
     this.nuevoObj = cual;
     this.nuevoObj.pagado = 1;
     this.esNuevo = false;
-    alert('estas seguro que queres pagar?' + this.nuevoObj.nombre);
+    alert('Estas seguro que queres pagar ' + this.nuevoObj.nombre + '?');
     this.save();
   }
 
@@ -72,7 +75,10 @@ export class FijosPage {
     this.list();
   } 
     
-  list() {
+  async list() {
+    const l = await this.loader.create();
+    l.present();
+    this.servicios();
     this.srv.listGastos().subscribe({
       next: (data: any) => {
         data.fijos.forEach((element: Fijo) => {
@@ -84,7 +90,9 @@ export class FijosPage {
             monto: element.monto, 
             mes: element.mes, 
             vencimiento: venc, 
-            pagado: element.pagado
+            pagado: element.pagado,
+            cuenta: element.cuenta,
+            link: element.link
           };
           
           this.listObjs.push(temp);
@@ -92,9 +100,11 @@ export class FijosPage {
         this.montoTotal = this.listObjs.reduce((sum: any, gasto: any) => { 
           return gasto.pagado===0 ? sum + gasto.monto : sum;
         }, 0);
+        l.dismiss();
       },
       error: (err) => {
         this.hucon.processError(err);
+        l.dismiss();
       }
     });
   }
@@ -107,6 +117,7 @@ export class FijosPage {
 
   newFijo() {
     this.nuevoObj = this.srv.newGasto();
+    this.nuevoObj.mes = moment().month();
     this.esNuevo = true;
     this.edit = true;
   }
@@ -116,7 +127,7 @@ export class FijosPage {
       this.srv.createGasto(this.nuevoObj).subscribe({
         next: (data: any) => {
           this.cancelar();
-          this.list();
+          this.refresh();
           this.hucon.showMessage(data);
         }, 
         error: (err) => {
@@ -129,7 +140,7 @@ export class FijosPage {
       this.srv.updateGasto(this.nuevoObj).subscribe({
         next: (data: any) => {
           this.cancelar();
-          this.list();
+          this.refresh();
           this.hucon.showMessage(data);
         }, 
         error: (err) => {
@@ -150,6 +161,8 @@ export class FijosPage {
     let temp = cual.vencimiento ? cual.vencimiento.split('T')[0] : new Date();
     this.nuevoObj.vencimiento = temp;
     this.nuevoObj.nombre = cual.nombre;
+    this.nuevoObj.cuenta = cual.cuenta;
+    this.nuevoObj.link = cual.link;
     this.esNuevo = false;
     this.edit = true;
     console.log(this.nuevoObj);
@@ -157,10 +170,26 @@ export class FijosPage {
 
   delete(cual: any, sliding: any) {
     sliding.close();
-    this.srv.deleteGasto(cual.id).subscribe({
+    this.srv.deleteGasto(cual.ID).subscribe({
       next: (data) => {
         this.hucon.showMessage(JSON.stringify(data));
-        this.list();
+        this.refresh();
+      },
+      error: (err) => {
+        this.hucon.processError(err);
+      }
+    });
+  }
+
+  showDetails(cual: Fijo) {
+    this.selected = cual;
+    this.isModalOpen = true;
+  }
+
+  translate () {
+    this.srv.translateGastos().subscribe({
+      next: (data) => {
+        this.hucon.showMessage(JSON.stringify(data), 'success');
       },
       error: (err) => {
         this.hucon.processError(err);

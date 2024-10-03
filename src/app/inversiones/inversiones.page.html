@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="false">
   <div class="hu-page">
   <ion-list class="header2" *ngIf="edit">
     <ion-card>
@@ -31,28 +31,24 @@
   </ion-card>
   </ion-list>
   <ng-container *ngIf="listObjs else loading">
-    <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
-      <ion-list>
-        <ion-list-header>
-          <ion-col size="3">Nombre</ion-col>
-          <ion-col size="4">Monto</ion-col>
-          <ion-col size="2">Tasa</ion-col>
-          <ion-col size="3">Vencimiento</ion-col>
-        </ion-list-header>
+    <ion-list>
+      <ion-list-header>
+        <ion-col size="6">Nombre</ion-col>
+        <ion-col size="6">Vencimiento</ion-col>
+      </ion-list-header>
+      <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
         <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
-          <ion-item>
-            <ion-col size="3">{{objeto.nombre}}</ion-col>
-            <ion-col size="4" class="text-right">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
-            <ion-col size="2" class="text-right">{{objeto.tasa | number: '2.0-2'}}%</ion-col>
-            <ion-col size="3" class="text-right">{{objeto.vencimiento | date: 'dd/MM/yyyy'}}</ion-col>
+          <ion-item (click)="showDetails(objeto)">
+            <ion-col size="6">{{objeto.nombre}}</ion-col>
+            <ion-col size="6" class="text-right">{{objeto.vencimiento | date: 'dd/MM/yyyy'}}</ion-col>
           </ion-item>
           <ion-item-options>
             <ion-item-option (click)="update(objeto, sliding)"><ion-icon src="../../assets/icon/edit.svg"></ion-icon></ion-item-option>
             <ion-item-option (click)="delete(objeto, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
+      </div>
       </ion-list>  
-    </div>
   </ng-container>
   </div>
 </ion-content>
@@ -67,3 +63,35 @@
 <ng-template #loading>
   <ion-card class="loading">Loading...</ion-card>
 </ng-template>
+<ion-modal [isOpen]="isModalOpen" #modal  initial-breakpoint="0.3">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        {{selected.nombre}}
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button color="medium" (click)="isModalOpen = false">
+          <ion-icon src="../../assets/icon/close.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-item>
+      <ion-col size="6">Tasa: {{selected.tasa}}</ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-col size="4">{{selected.tipo==1 ? 'Inicial' : 'Monto total'}}</ion-col>
+      <ion-col size="4" *ngIf="selected.tipo==1">Interes</ion-col>
+      <ion-col size="4" *ngIf="selected.tipo==1">Final</ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-col size="4">$ {{selected.monto | number: '2.0-2'}}</ion-col>
+      <ion-col size="4" *ngIf="selected.tipo==1">$ {{selGanancia | number: '2.0-2'}}</ion-col>
+      <ion-col size="4" *ngIf="selected.tipo==1">$ {{selTotal | number: '2.0-2'}}</ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-col size="6">Vencimiento: {{selected.vencimiento | date: 'dd/MM/yyyy'}}</ion-col>
+    </ion-item>
+  </ion-content>
+</ion-modal>

@@ -35,16 +35,14 @@
     <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
       <ion-list>
         <ion-list-header>
-          <ion-col size="3">Nombre</ion-col>
-          <ion-col size="4">Vencimiento</ion-col>
-          <ion-col size="4">Monto</ion-col>
+          <ion-col size="6">Nombre</ion-col>
+          <ion-col size="5">Vencimiento</ion-col>
           <ion-col size="1"></ion-col>
         </ion-list-header>
-        <ion-item-sliding #sliding *ngFor="let objeto of listObjs">
-          <ion-item [ngClass]="{'pagado': objeto.pagado===1}">
-            <ion-col size="3">{{objeto.nombre}}</ion-col>
-            <ion-col size="4" class="text-right">{{objeto.vencimiento}}</ion-col>
-            <ion-col size="4" class="text-right">$ {{objeto.monto | number: '2.0-2'}}</ion-col>
+        <ion-item-sliding #sliding *ngFor="let objeto of listObjs" (click)="showDetails(objeto)">
+          <ion-item id="item-modal" [ngClass]="{'pagado': objeto.pagado===1}">
+            <ion-col size="6">{{objeto.nombre}}</ion-col>
+            <ion-col size="5" class="text-right">{{objeto.vencimiento}}</ion-col>
             <ion-col size="1" class="text-right">
               <ion-icon *ngIf="objeto.pagado===1" src="../../assets/icon/check.svg" color="success"></ion-icon>
               <ion-icon *ngIf="objeto.vencimiento===today && objeto.pagado===0" src="../../assets/icon/alert.svg" color="danger"></ion-icon>
@@ -59,12 +57,13 @@
       </ion-list>  
     </div>
   </ng-container>
+  <ion-button slot="start" expand="block" color="primary" (click)="translate()">Mover al mes siguiente</ion-button>
   </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="primary">
     <ion-item>
-      <ion-col size="6">Total al {{today}}</ion-col>
+      <ion-col size="6">Total al {{today | date: 'dd/MM/yyyy'}}</ion-col>
       <ion-col class="text-right">$ {{montoTotal | number: '2.1-2'}}</ion-col>
     </ion-item>  
   </ion-toolbar>
@@ -72,3 +71,28 @@
 <ng-template #loading>
   <ion-card class="loading">Loading...</ion-card>
 </ng-template>
+<ion-modal [isOpen]="isModalOpen" #modal  initial-breakpoint="0.25">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        {{selected.nombre}}<label *ngIf="selected.pagado"> - Ya esta pagado!</label>
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button color="medium" (click)="isModalOpen = false">
+          <ion-icon src="../../assets/icon/close.svg"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-item>
+      <ion-col size="6"><a href="{{selected.link}}">Ir al sitio<ion-icon src="../../assets/icon/chevron.svg"></ion-icon></a></ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-col size="6">Nro de referencia: {{selected.cuenta}}</ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-col size="6">Monto: $ {{selected.monto | number: '2.0-2'}}</ion-col>
+    </ion-item>
+  </ion-content>
+</ion-modal>

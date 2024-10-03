@@ -29,14 +29,14 @@
     </ion-card>
   </ion-list>
   <ng-container *ngIf="listGastos else loading">
-    <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
-      <ion-list>
-        <ion-list-header>
-          <ion-col size="4">Motivo</ion-col>
-          <ion-col size="4">Fecha</ion-col>
-          <ion-col size="3">Monto</ion-col>
-          <ion-col size="1"></ion-col>
-        </ion-list-header>
+    <ion-list>
+      <ion-list-header>
+        <ion-col size="4">Motivo</ion-col>
+        <ion-col size="4">Fecha</ion-col>
+        <ion-col size="3">Monto</ion-col>
+        <ion-col size="1"></ion-col>
+      </ion-list-header>
+      <div class="scrollable" [ngClass]="edit ? 'short' : 'long'">
         <ion-item-sliding #sliding *ngFor="let gasto of listGastos">
           <ion-item>
             <ion-col size="4">{{gasto.descripcion}}</ion-col>
@@ -49,8 +49,8 @@
             <ion-item-option (click)="delete(gasto, sliding)"><ion-icon src="../../assets/icon/delete.svg"></ion-icon></ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
+      </div>
       </ion-list>  
-    </div>
   </ng-container>
   </div>
 </ion-content>

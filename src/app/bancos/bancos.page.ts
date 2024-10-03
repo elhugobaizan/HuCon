@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HuconService } from '../utils/hucon.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'hucon-bancos',
@@ -31,6 +32,7 @@ export class BancosPage {
 
   constructor(
     private srv: BancosService,
+    private loader: LoadingController,
     private hucon: HuconService) {
     this.list();
   }
@@ -42,14 +44,18 @@ export class BancosPage {
     this.list();
   }
 
-  list() {
+  async list() {
+    const l = await this.loader.create();
+    l.present();
     this.srv.listBancos().subscribe({
       next: (data: any) => {
         this.listBancos = data.bancos;
         this.montoTotal.efectivo = this.listBancos.reduce((sum: any, banco: any) => { return sum + banco.efectivo}, 0);
+        l.dismiss();
       },
       error: (err) => {
         this.hucon.processError(err);
+        l.dismiss();
       }
     });
   }

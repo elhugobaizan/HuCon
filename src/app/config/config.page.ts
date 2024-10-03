@@ -5,11 +5,10 @@ import { ConfigService } from './config.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { GastosService } from '../gastos/gastos.service';
 
 @Component({
   selector: 'hucon-config',
-  templateUrl: '../utils/hucon.template.html',
+  templateUrl: './config.page.html',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [IonCol, IonItem, IonButton, IonList, IonInput, IonHeader, 

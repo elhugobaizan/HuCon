@@ -14,11 +14,17 @@ export class HuconService {
       private http: HttpClient
     ) {}
 
-    async presentAlert(title: string, message: string) {
+    async presentAlert(title: string, message: string, fcnCancel: any, fcnAccept: any) {
       let a = await this.alert.create({
         header: title,
         message: message,
-        buttons: ['Aceptar']
+        buttons: [{
+          text: 'Cancelar',
+          handler: fcnCancel
+        },{
+          text: 'Aceptar',
+          handler: fcnAccept
+        }]
       });
       a.present();
     }

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HuconService } from '../utils/hucon.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'hucon-gastos',
@@ -29,6 +30,7 @@ export class GastosPage {
 
   constructor(
     private srv: GastosService,
+    private loader: LoadingController,
     private hucon: HuconService) {
     this.list();
   }
@@ -40,14 +42,18 @@ export class GastosPage {
     this.list();
   } 
     
-  list() {
+  async list() {
+    const l = await this.loader.create();
+    l.present();
     this.srv.listGastos().subscribe({
       next: (data: any) => {
         this.listGastos = data.gastos;
         this.montoTotal = this.listGastos.reduce((sum: any, gasto: any) => { return sum + gasto.monto}, 0);
+        l.dismiss();
       },
       error: (err) => {
         this.hucon.processError(err);
+        l.dismiss();
       }
     });
   }
@@ -104,14 +110,21 @@ export class GastosPage {
 
   delete(cual: any, sliding: any) {
     sliding.close();
-    this.srv.deleteGasto(cual.ID).subscribe({
-      next: (data: any) => {
-        this.hucon.showMessage(data.message);
-        this.list();
+    this.hucon.presentAlert("Borrar gasto", "estas seguro de borrar?",
+      () => {
+        
       },
-      error: (err: any) => {
-        this.hucon.processError(err);
+      () => {
+        this.srv.deleteGasto(cual.ID).subscribe({
+          next: (data: any) => {
+            this.hucon.showMessage(data.message);
+            this.list();
+          },
+          error: (err: any) => {
+            this.hucon.processError(err);
+          }
+        });
       }
-    });
+    );
   }
 }

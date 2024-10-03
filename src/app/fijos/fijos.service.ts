@@ -43,4 +43,8 @@ export class FijosService extends Fijos {
   deleteGasto(id: string) {
     return this.http.delete(`${environment.server}/fijos/${id}`);
   }
+
+  translateGastos() {
+    return this.http.get(`${environment.server}/fijos/translate`);
+  }
 }

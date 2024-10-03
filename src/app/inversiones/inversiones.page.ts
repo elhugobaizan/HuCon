@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Banco, Inversion } from './inversiones.models';
 import { HuconService } from '../utils/hucon.service';
+import { LoadingController } from '@ionic/angular';
+import * as moment from 'moment'; 
 
 @Component({
   selector: 'hucon-inversiones',
@@ -29,9 +31,14 @@ export class InversionesPage {
   template: any = {
     title: "Inversiones"
   }
+  selected: Inversion = new Inversion();
+  isModalOpen: boolean = false;
+  selGanancia: number = 0;
+  selTotal: number = 0;
 
   constructor(
     private srv: InversionesService,
+    private loader: LoadingController,
     private hucon: HuconService) {
     this.list();
     this.bancos();
@@ -55,11 +62,14 @@ export class InversionesPage {
     this.list();
   }
 
-  list() {
+  async list() {
+    const l = await this.loader.create();
+    l.present();
     this.srv.listInversiones().subscribe({
       next: (data: any) => {
         data.inversiones.forEach((element: Inversion) => {
           let venc = element.vencimiento ? element.vencimiento.toString().split('T')[0] : '';
+          let crea = element.creacion ? element.creacion.toString().split('T')[0] : '';
           let temp = {
             ID: element.ID, 
             id_banco: element.id_banco, 
@@ -67,15 +77,18 @@ export class InversionesPage {
             monto: element.monto, 
             tasa: element.tasa, 
             vencimiento: venc,
+            creacion: crea,
             tipo: element.tipo
           };
           this.listObjs.push(temp);
         });
 
         this.montoTotal = this.listObjs.reduce((sum: any, inversion: any) => { return sum + inversion.monto}, 0);
+        l.dismiss();
       },
       error: (err) => {
         this.hucon.processError(err);
+        l.dismiss();
       }
     });
   }
@@ -128,6 +141,7 @@ export class InversionesPage {
     this.nuevoObj.id_banco = cual.id_banco;
     this.nuevoObj.tasa = cual.tasa;
     this.nuevoObj.vencimiento = cual.vencimiento;
+    this.nuevoObj.creacion = cual.creacion;
     this.nuevoObj.tipo = cual.tipo;
     this.esNuevo = false;
     this.edit = true;
@@ -144,5 +158,14 @@ export class InversionesPage {
         this.hucon.processError(err);
       }
     });
+  }
+
+  showDetails(cual: Inversion) {
+    const dia1 = moment(cual.vencimiento, 'YYYY-MM-DD');
+    const dia2 = moment(cual.creacion, 'YYYY-MM-DD');
+    this.selGanancia = (cual.monto*((cual.tasa/100/365)*dia1.diff(dia2, 'days')));
+    this.selTotal = cual.monto + this.selGanancia;
+    this.selected = cual;
+    this.isModalOpen = true;
   }
 }

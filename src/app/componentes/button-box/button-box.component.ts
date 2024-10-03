@@ -22,7 +22,7 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Output, Input 
       }
     }
     ion-card{
-      background-color: #FFFFFF;
+      background-color: var(--hb-button-bg-color, #FFFFFF);
       
       ion-card-content {
           text-align: center;
